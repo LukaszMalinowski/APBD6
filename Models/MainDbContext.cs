@@ -29,7 +29,8 @@ namespace cwiczenia6_zen_s19743.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<PrescriptionMedicament>().HasKey(pm => new {pm.IdMedicament, pm.IdPrescription});
+            modelBuilder.Entity<PrescriptionMedicament>()
+                .HasKey(pm => new {pm.IdMedicament, pm.IdPrescription});
         }
     }
 }
