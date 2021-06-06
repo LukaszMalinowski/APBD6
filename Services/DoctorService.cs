@@ -36,9 +36,23 @@ namespace cwiczenia6_zen_s19743.Services
             dbContext.SaveChanges();
         }
 
-        public void UpdateDoctor(int doctorId, Doctor doctor)
+        public void UpdateDoctor(int doctorId, Doctor newDoctor)
         {
-            throw new System.NotImplementedException();
+            var dbContext = new MainDbContext();
+
+            var updatedDoctor = dbContext.Doctors
+                .SingleOrDefault(tmpDoctor => tmpDoctor.IdDoctor == doctorId);
+
+            if (updatedDoctor == null)
+            {
+                throw new DoctorNotFoundException(doctorId);
+            }
+
+            updatedDoctor.Email = newDoctor.Email;
+            updatedDoctor.FirstName = newDoctor.FirstName;
+            updatedDoctor.LastName = newDoctor.LastName;
+
+            dbContext.SaveChanges();
         }
 
         public void DeleteDoctor(int doctorId)

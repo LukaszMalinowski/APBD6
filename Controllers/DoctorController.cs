@@ -48,7 +48,16 @@ namespace cwiczenia6_zen_s19743.Controllers
         [HttpPut]
         public IActionResult UpdateDoctor(int doctorId, [FromBody] Doctor doctor)
         {
-            return null;
+            try
+            {
+                _service.UpdateDoctor(doctorId, doctor);
+            }
+            catch (DoctorNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            return Ok();
         }
 
         [Route("{doctorId}")]
