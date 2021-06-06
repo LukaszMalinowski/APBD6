@@ -10,7 +10,6 @@ namespace cwiczenia6_zen_s19743.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
-
         private readonly IDoctorService _service;
 
         public DoctorController(IDoctorService service)
@@ -24,7 +23,7 @@ namespace cwiczenia6_zen_s19743.Controllers
         public IActionResult GetDoctorById(int doctorId)
         {
             Doctor doctor;
-            
+
             try
             {
                 doctor = _service.GetDoctorById(doctorId);
@@ -40,7 +39,9 @@ namespace cwiczenia6_zen_s19743.Controllers
         [HttpPost]
         public IActionResult AddDoctor([FromBody] Doctor doctor)
         {
-            return null;
+            _service.AddDoctor(doctor);
+
+            return NoContent();
         }
 
         [Route("{doctorId}")]
@@ -54,7 +55,16 @@ namespace cwiczenia6_zen_s19743.Controllers
         [HttpDelete]
         public IActionResult DeleteDoctorById(int doctorId)
         {
-            return null;
+            try
+            {
+                _service.DeleteDoctor(doctorId);
+            }
+            catch (DoctorNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            return NoContent();
         }
     }
 }
