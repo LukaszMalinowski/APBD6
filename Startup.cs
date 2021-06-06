@@ -29,6 +29,7 @@ namespace cwiczenia6_zen_s19743
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IDoctorService, DoctorService>();
+            services.AddScoped<IPrescriptionService, PrescriptionService>();
 
             services.AddControllers()
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
