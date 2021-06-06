@@ -1,4 +1,7 @@
-﻿using cwiczenia6_zen_s19743.Models;
+﻿using System;
+using cwiczenia6_zen_s19743.Exceptions;
+using cwiczenia6_zen_s19743.Models;
+using cwiczenia6_zen_s19743.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace cwiczenia6_zen_s19743.Controllers
@@ -7,11 +10,31 @@ namespace cwiczenia6_zen_s19743.Controllers
     [ApiController]
     public class DoctorController : ControllerBase
     {
+
+        private readonly IDoctorService _service;
+
+        public DoctorController(IDoctorService service)
+        {
+            _service = service;
+        }
+
+
         [Route("{doctorId}")]
         [HttpGet]
         public IActionResult GetDoctorById(int doctorId)
         {
-            return null;
+            Doctor doctor;
+            
+            try
+            {
+                doctor = _service.GetDoctorById(doctorId);
+            }
+            catch (DoctorNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+
+            return Ok(doctor);
         }
 
         [HttpPost]
