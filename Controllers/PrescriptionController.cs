@@ -1,4 +1,5 @@
 ﻿using System;
+using cwiczenia6_zen_s19743.Dtos;
 using cwiczenia6_zen_s19743.Exceptions;
 using cwiczenia6_zen_s19743.Models;
 using cwiczenia6_zen_s19743.Services;
@@ -21,7 +22,7 @@ namespace cwiczenia6_zen_s19743.Controllers
         [Route("{prescriptionId}")]
         public IActionResult GetPrescriptionById(int prescriptionId)
         {
-            Prescription prescription;
+            PrescriptionDto prescription;
 
             try
             {

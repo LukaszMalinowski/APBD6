@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using cwiczenia6_zen_s19743.Dtos;
 using cwiczenia6_zen_s19743.Exceptions;
 using cwiczenia6_zen_s19743.Models;
 using Microsoft.EntityFrameworkCore;
@@ -7,29 +8,40 @@ namespace cwiczenia6_zen_s19743.Services
 {
     public class PrescriptionService : IPrescriptionService
     {
-        public Prescription GetPrescriptionById(int prescriptionId)
+        public PrescriptionDto GetPrescriptionById(int prescriptionId)
         {
             var dbContext = new MainDbContext();
 
             var prescription = dbContext.Prescriptions
                 .Where(tmpPrescription => tmpPrescription.IdPrescription == prescriptionId)
-                .Select(tmpPrescription => new Prescription
+                .Select(tmpPrescription => new PrescriptionDto
                 {
                     IdPrescription = tmpPrescription.IdPrescription,
                     Date = tmpPrescription.Date,
                     DueDate = tmpPrescription.DueDate,
-                    IdPatient = tmpPrescription.IdPatient,
-                    IdDoctor = tmpPrescription.IdDoctor,
-                    Patient = tmpPrescription.Patient,
-                    Doctor = tmpPrescription.Doctor,
-                    PrescriptionMedicaments = tmpPrescription
-                        .PrescriptionMedicaments.Select(prescriptionMedicament => new PrescriptionMedicament
+                    Patient = new PatientDto
+                    {
+                        IdPatient = tmpPrescription.IdPatient,
+                        FirstName = tmpPrescription.Patient.FirstName,
+                        LastName = tmpPrescription.Patient.LastName
+                    },
+                    Doctor = new DoctorDto
+                    {
+                        IdDoctor = tmpPrescription.IdDoctor,
+                        FirstName = tmpPrescription.Doctor.FirstName,
+                        LastName = tmpPrescription.Doctor.LastName
+                    },
+                    Medicaments = tmpPrescription.PrescriptionMedicaments
+                        .Select(medicament => new MedicamentDto
                         {
-                            Details = prescriptionMedicament.Details,
-                            Medicament = prescriptionMedicament.Medicament
+                            IdMedicament = medicament.IdMedicament,
+                            Details = medicament.Details,
+                            Dose = medicament.Dose,
+                            Name = medicament.Medicament.Name,
+                            Description = medicament.Medicament.Description,
+                            Type = medicament.Medicament.Type
                         }).ToList()
-                })
-                .SingleOrDefault();
+                }).FirstOrDefault();
 
 
             if (prescription == null)
